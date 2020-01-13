@@ -14,6 +14,8 @@ HISTCONTROL=ignoreboth
 
 # Complete after sudo
 complete -cf sudo
+# Complete after man
+complete -cf man
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -25,8 +27,8 @@ shopt -s checkwinsize
 shopt -s autocd
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=100000
-HISTFILESIZE=200000
+HISTSIZE=10000000
+HISTFILESIZE=20000000
 
 # enable zsh like auto nd 'set show-all-if-ambiguous on'
 bind 'set show-all-if-ambiguous on'
@@ -42,6 +44,7 @@ shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/luarocks ] && eval $(luarocks path --bin)
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
@@ -99,7 +102,15 @@ fi
 
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+transfer() {
+    # write to output to tmpfile because of progress bar
+    tmpfile=$( mktemp -t transferXXX )
+    curl -s --upload-file $1 https://transfer.sh/$(basename $1) >> $tmpfile;
+    cat $tmpfile;
+    rm -f $tmpfile;
+}
 
+alias transfer=transfer
 # some more ls aliases
 
 alias ll='ls -alF'
@@ -107,7 +118,11 @@ alias la='ls -A'
 alias l='ls -CF'
 alias vim='nvim'
 alias vi='/usr/bin/vim'
-alias vimtest='vim -u NORC --cmd "exe '\''set rtp+='\'' . getcwd()"'
+alias vi741689='~/.vims/741689/bin/vim'
+alias vi74052='~/.vims/74052/bin/vim'
+alias vimtest='vim -u NORC --cmd "exe '\''set rtp+='\'' . getcwd()" --cmd "set termguicolors"'
+alias vitest='vi -u NORC --cmd "exe '\''set rtp+='\'' . getcwd()" --cmd "set nocp"'
+alias tmux="env TERM=xterm-256color tmux -2"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -146,14 +161,25 @@ then
     bind '"\e[B": history-search-forward'
 fi
 export ANDROID_HOME="$HOME/tools/android-sdk-linux"
-export RUST_SRC_PATH="$HOME/forks/rust/src"
+export RUST_SRC_PATH="$HOME/.multirust/toolchains/nightly-i686-unknown-linux-gnu/lib/rustlib/src/rust/src"
 export PATH="$HOME/.local/bin:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
 export PATH="$HOME/.npm-packages/bin:$PATH"
+export GOPATH=$HOME/goprojects
+export NODE_PATH="/home/wsdjeg/.npm-packages/lib/node_modules"
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$HOME/.config/composer/vendor/bin
+export PATH=$PATH:$HOME/.SpaceVim/bin
+export PATH=$PATH:$HOME/.luarocks/bin
 if which ruby >/dev/null && which gem >/dev/null; then
-    PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+    PATH="$(ruby -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 if which perl >/dev/null ;then
     eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_COMPLETION_TRIGGER='~~'
+export UNCRUSTIFY_CONFIG="$HOME/.uncrustify/ben.cfg"
+export NO_AT_BRIDGE=1
+alias pmd="$HOME/src/pmd/pmd-dist/target/pmd-bin-6.0.0-SNAPSHOT/bin/run.sh pmd"
+export PYTHON_HOST_PROG="/usr/bin/python2"
+export PYTHON3_HOST_PROG="/usr/bin/python"

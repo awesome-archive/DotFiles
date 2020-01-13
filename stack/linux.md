@@ -37,6 +37,9 @@ no label, UUID=836b551a-6814-437c-a3f4-edf2a498f51a
 4. `sudo swapon -a`
 5. `free -m`, check the swap size.
 
+Q:command for system log?
+A: `dmesg` and `journalctl`
+
 Q:How to set localtime in archlinux?
 A:
 ```sh
@@ -288,4 +291,112 @@ edit /etc/gemrc or run gem with the --no-user-install flag.
 Optional dependencies for ruby
 ruby-docs: Ruby documentation
 tk: for Ruby/TK
+```
+
+**code search tools for developers**
+https://beyondgrep.com/more-tools/
+
+how to check what terminal is useing
+
+`which $(ps -o 'cmd=' -p $(ps -o 'ppid=' -p $$))`
+
+how to mount usb in terminal?
+1. `sudo fdisk -l` to see the drivers.
+2. `sudo mount /dev/sda1 /mnt/` to mount usb
+3. `df -kh` to view the filesystem
+
+How to set gamma?
+1. `xrandr` will list all
+2. `xrandr -s` select the gramma you need.
+
+
+how to clear git https username and password?
+`git config --global --unset credential.helper`
+
+how to install vimdoc?
+
+```
+git clone https://github.com/google/vimdoc.git
+python setup.py config
+python setup.py build
+python setup.py install --user
+```
+
+
+install gi lib for python3?
+
+```
+sudo pacman -S python-gobject
+```
+
+how to install php-msgpack in arch?
+
+```sh
+git clone https://aur.archlinux.org/packages/php-msgpack/
+makepkg -isr
+```
+
+how to build ycm in archlinux?
+
+```sh
+# use system clang instead of download clang 5.0
+# to install xbuild, you need to install extra/mono
+./install.sh --clang-completer --system-libclang
+```
+
+
+how to search file insteaded via pacman?
+```
+pacman -Qlq package | grep -v '/$' | xargs du -h | sort -h
+```
+
+Q: how to print windows info in linux?
+
+```
+xwininfo 和 xprop，返回信息侧重不同，按需求选。
+```
+
+" TODO: 加入全半角转化
+" https://blog.csdn.net/u012968002/article/details/64440836
+" http://www.cnblogs.com/kaituorensheng/p/3554571.html
+" https://blog.csdn.net/yuan892173701/article/details/8731490
+
+Ubuntu 16.04 新机器加用户，并快速搭建机器人！
+
+```
+$ curl -O https://storage.googleapis.com/golang/go1.9.linux-amd64.tar.gz  
+$ tar -C /usr/local -zxvf go1.9.linux-amd64.tar.gz  
+$ mkdir -p ~/go/src  
+$ echo "export GOPATH=$HOME/go" >> ~/.bashrc  
+$ echo "export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin" >> ~/.bashrc  
+$ source ~/.bashrc  
+$ go version 
+```
+
+Q: How to fuck archlinux shutdown?
+
+```
+systemctl mask mkinitcpio-generate-shutdown-ramfs.service
+```
+
+Q: Failed to connect to X server?
+
+I am using nvidia GT 520M, just replace package `nvidia` with `nvidia-390xx`, the error log is:
+
+```
+sudo pacman -R nvidia
+sudo pacman -Syu nvidia-390xx
+```
+
+Q: Failed to install purescript in archlinux?
+
+The problem is Arch uses ncurses6 where as PS is using ncurses5.
+I was able to build PS from sources and that worked, but then when I tried to
+use pulp init it failed saying it couldn't find libtinfo.so.5. The solution
+ncurses 5 was to install ncurses5-compat-libs after doing so now pulp 
+init worked with my purs compiled from sources.
+
+```
+sudo pacman -S ncurses5-compat-libs
+npm install -g purescript
 ```

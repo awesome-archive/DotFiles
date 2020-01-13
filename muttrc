@@ -17,7 +17,6 @@ set quit=ask-yes
 set timeout = 600
 # locale
 set charset = UTF-8
-set locale  = zh_CN.UTF-8
 # hook charset
 charset-hook gb2312 gb2312
 charset-hook GB2312 GB2312
@@ -73,7 +72,7 @@ set edit_headers = no
 # ext app to view attachment
 set mailcap_path="~/.mailcap"
 # 当外部程序退出时, 是否要求用户按一个键才返回
-set wait_key=yes
+set wait_key=no
 # alias
 set alias_file = ~/.mutt/.mutt.alias
 # source ~/.mutt/.mutt.alias
@@ -82,30 +81,6 @@ set attach_format = "%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s]"
 set attach_sep = "\n"
 set attach_split = yes
 alternative_order text/enriched text/plain text application/postscript image/*
-
-# Colors
-#color  obj         front           back
-#----- ------------ --------------- ---------
-#color hdrdefault   black           cyan     # 邮件头颜色
-#color quoted       blue            white    # 引文颜色
-#color signature    brightblack     white
- color indicator    brightwhite     magenta
- color attachment   black           green
-#color error        red             white
-#color message      blue            white
- color search       black           brightyellow
- color status       brightyellow    blue
- color tree         red             white
-#color normal       blue            white
- color tilde        green           white
-#color bold         brightyellow    white
-#color markers      red             white
- color index        brightwhite     red ~N
- color index        red             default ~O
- color index        brightblack     default ~D
- mono  bold         bold
- mono  underline    underline
- mono  indicator    reverse
 
 # 让mutt可以更好的阅读html邮件
 auto_view text/html
@@ -125,5 +100,6 @@ set use_from=yes
 set reply_to=yes
 set reverse_name=yes
 
-macro index,pager ,G            "!~/.getmail/getmail\n"   "Invoke getmail" 
+macro generic ,G "<shell-escape>$HOME/.getmail/getmail 2>&1 > /dev/null &<return>"
 
+source ~/.mutt/colors

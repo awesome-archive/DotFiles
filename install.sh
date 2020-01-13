@@ -111,6 +111,14 @@ if [ ! -d "$HOME/.config" ];then
     mkdir ~/.config
 fi
 
+if [ ! -d "$HOME/.ssh" ];then
+    mkdir ~/.ssh
+fi
+
+if [ ! -d "$HOME/.local/bin" ];then
+    mkdir -p ~/.config/bin
+fi
+
 if [ ! -d "$HOME/.config/termite" ];then
     mkdir ~/.config/termite
 fi
@@ -122,29 +130,6 @@ fi
 if [ $# -eq 1 ]
 then
     case $1 in
-        nvim)
-            symlink 'config/nvim'
-            exit 0
-            ;;
-        vim)
-            if [ -e ~/.vimrc ]
-            then
-                mv ~/.vimrc ~/.vimrc_back
-                printf "Move $Red~/.vimrc to ~/.vimrc_back$Color_off\n"
-            fi
-            if file ~/.vim | grep $PWD &> /dev/null;then
-                printf "Installed $Red~/.vim$Color_off\n"
-            else
-                if [ -e ~/.vim ]
-                then
-                    mv ~/.vim ~/.vim_back
-                    printf "Move $Red~/.vim to ~/.vim_back$Color_off\n"
-                fi
-                printf "Linking $Cyan~/.vim$Color_off -> $Blue$PWD/config/nvim$Color_off\n"
-                ln -s $PWD/config/nvim ~/.vim
-            fi
-            exit 0
-            ;;
         rust)
             if [ ! -e `which rustc` ]
             then
@@ -155,24 +140,33 @@ then
     esac
 fi
 # Install configuration
-symlink 'fonts'
+symlink 'local/share/fonts'
+
 # mail
-symlink 'mutt'
 symlink 'getmail'
 symlink 'muttrc'
-symlink 'msmtprc'
+symlink 'mutt'
+if [ ! -f ~/.msmtprc ];
+then
+    cp msmtprc ~/.msmtprc
+    printf "Copy ${Red}msmtprc to ~/.msmtprc ${Color_off}\n"
+    printf "You need to run chmod 0600 ~/.msmtprc after edit password"
+    
+fi
 symlink 'procmailrc'
 symlink 'mailcap'
+
+
 # windows manager
 symlink 'config/i3/config'
 symlink 'config/i3status/config'
 symlink 'config/vifm'
-symlink 'config/nvim'
 symlink 'config/lilyterm'
 # fcitx
 symlink 'config/fcitx/config'
 symlink 'config/fcitx/conf'
 symlink 'config/fcitx/data'
+symlink 'config/fcitx/skin'
 symlink 'config/fcitx/pinyin/pySym.mb'
 # termite
 symlink 'config/termite/config'
@@ -196,6 +190,34 @@ symlink 'vimperatorrc'
 symlink 'backgrounds'
 symlink 'scripts'
 
+# custom bin
+symlink 'local/bin/vimlint'
+
+# for ctags
+symlink 'ctags'
+
+# for SpaceVim
+symlink 'SpaceVim.d'
+
+# for qutebrowser
+if [ ! -d "$HOME/.config/qutebrowser" ];then
+    mkdir ~/.config/qutebrowser
+fi
+if [ ! -d "$HOME/.local/share/qutebrowser/userscripts" ];then
+    mkdir $HOME/.local/share/qutebrowser/userscripts
+fi
+symlink 'config/qutebrowser/config.py'
+symlink 'local/share/qutebrowser/userscripts/ydcv'
+
+# gem
+symlink 'gemrc'
+
+# wego
+symlink 'wegorc'
+
+# tmux
+symlink 'tmux.conf'
+
 if cat /etc/issue | grep Ubuntu &> /dev/null;then
     printf "$Red""Warning ""$Color_off""$Blue""This is ubuntu,and will skip xinitrc$Color_off\n"
 else
@@ -203,13 +225,10 @@ else
     symlink 'xprofile'
 fi
 
-if [ -e ~/.vim ]
-then
-    printf "Installed $Red~/.vim$Color_off\n"
-else
-    printf "Linking $Cyan~/.vim$Color_off -> $Blue$PWD/config/nvim$Color_off\n"
-    ln -s $PWD/config/nvim ~/.vim
-fi
+# ssh
+
+symlink 'ssh/config'
+
 
 # Install bash-git-prompt
 if [ -e ~/.bash-git-prompt ]
@@ -221,6 +240,15 @@ else
     printf "$Blue Finished Downloading$Color_off\n"
 fi
 
+# Install bumblebee-status
+if [ -e ~/.bumblebee-status ]
+then
+    printf "Installed $Red~/.bumblebee-status$Color_off\n"
+else
+    printf "$Cyan Downloading  bumblebee-status -> $Blue$HOME/.bumblebee-status$Color_off\n"
+    git clone https://github.com/wsdjeg/bumblebee-status.git ~/.bumblebee-status
+    printf "$Blue Finished Downloading$Color_off\n"
+fi
 
 # Install FZF
 if [ -e ~/.fzf ]
@@ -247,7 +275,7 @@ fi
 irssi_add () {
     SCRIPT=$HOME/.irssi/scripts/$1.pl
     SCRIPTAUTO=$HOME/.irssi/scripts/autorun/$1.pl
-    SCRIPTUP=https://raw.githubusercontent.com/irssi/scripts.irssi.org/gh-pages/scripts/$1.pl
+    SCRIPTUP=https://raw.githubusercontent.com/irssi/scripts.irssi.org/master/scripts/$1.pl
     if [ -e "$SCRIPT" ]
     then
         printf "Installed $Red$SCRIPT$Color_off\n"
@@ -275,3 +303,8 @@ irssi_add 'go' '1'
 irssi_add 'queryresume' '1'
 irssi_add 'trackbar' '1'
 irssi_add 'nickcolor' '1'
+
+
+# setup spacevim dev
+
+bash scripts/setup_spacevim_dev.sh

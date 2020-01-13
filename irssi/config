@@ -121,20 +121,24 @@ chatnets = {
 };
 
 channels = (
-  { name = "#lobby"; chatnet = "EsperNet"; autojoin = "No"; },
-  { name = "#freenode"; chatnet = "Freenode"; autojoin = "No"; },
+  { name = "#neovim"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#spacevim"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#spacevim-cn"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#vim-china"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#irssi"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#linux"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#i3"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#archlinux-cn"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#freenode"; chatnet = "Freenode"; autojoin = "No"; },
+  { name = "#linux"; chatnet = "Freenode"; autojoin = "no"; },
   { name = "#gamesurge"; chatnet = "GameSurge"; autojoin = "No"; },
   { name = "#ircsource"; chatnet = "IRCSource"; autojoin = "No"; },
   { name = "#netfuze"; chatnet = "NetFuze"; autojoin = "No"; },
   { name = "#oftc"; chatnet = "OFTC"; autojoin = "No"; },
   { name = "silc"; chatnet = "SILC"; autojoin = "No"; },
-  { name = "#neovim"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#rust"; chatnet = "Mozilla"; autojoin = "Yes"; },
-  { name = "#firefox"; chatnet = "Mozilla"; autojoin = "Yes"; }
+  { name = "#firefox"; chatnet = "Mozilla"; autojoin = "Yes"; },
+  { name = "#lobby"; chatnet = "EsperNet"; autojoin = "No"; }
 );
 
 aliases = {
@@ -397,7 +401,11 @@ statusbar = {
   };
 };
 settings = {
-  "fe-text" = { actlist_sort = "refnum"; term_force_colors = "yes"; };
+  "fe-text" = {
+    actlist_sort = "refnum";
+    term_force_colors = "yes";
+    scroll_page_count = "2";
+  };
   core = {
     real_name = "Wang Shidong";
     user_name = "wsdjeg";
@@ -409,13 +417,13 @@ settings = {
     awaylog_colors = "no";
     beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT";
     beep_when_away = "yes";
-    bell_beeps = "yes";
     max_command_history = "1000";
     show_names_on_join = "no";
-    theme = "default.theme";
+    theme = "default";
     use_msgs_window = "no";
     use_status_window = "yes";
     window_history = "yes";
+    emphasis_italics = "yes";
   };
   "perl/core/scripts" = {
     awl_shared_sbar = "OFF";
@@ -423,13 +431,16 @@ settings = {
     awl_maxlines = "1";
     awl_placement = "bottom";
     awl_position = "3";
+    awl_mouse = "yes";
+    mouse_scroll = "1";
   };
 };
 ignores = ( { level = "JOINS QUITS"; } );
 logs = { };
 keyboard = (
   { key = "meta-h"; id = "left_window"; data = ""; },
-  { key = "meta-l"; id = "right_window"; data = ""; }
+  { key = "meta-l"; id = "right_window"; data = ""; },
+  { key = "meta-[M"; id = "command"; data = "mouse_xterm"; }
 );
 
 # vim:filetype=irssi
