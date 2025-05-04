@@ -1,0 +1,22 @@
+snippet     fhead
+abbr        fileinfo
+options     head
+    --=============================================================================
+    -- `expand('%:t')` --- ${0}
+    -- Copyright `strftime("%Y")` Eric Wong
+    -- Author: Eric Wong < wsdjeg@outlook.com >
+    -- URL: https://spacevim.org
+    -- License: GPLv3
+    --=============================================================================
+
+snippet func
+abbr    function name(args)...end
+options word
+	function ${1:#:function_name}(${2:#:argument})
+		${0:TARGET}
+	end
+
+snippet ftodo
+abbr    todo status
+options word
+	${1:#:function_name} = function() end, -- todo${0:TARGET}

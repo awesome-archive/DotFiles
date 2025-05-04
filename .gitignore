@@ -1,14 +1,3 @@
-tags
-*.html
-*.class
-test/
-vim/.floo
-vim/.flooignore
-*.netrwhist
-*-rplugin~
-*rplugin.vim
-config/nvim/config/local.vim
-vimperator/
-**/vifminfo
-getmail/getmail[.r]*
-getmail/oldmail*
+*.o
+*.dll
+*.exe
